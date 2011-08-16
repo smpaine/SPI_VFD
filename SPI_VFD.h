@@ -42,6 +42,12 @@
 #define LCD_5x10DOTS 0x04
 #define LCD_5x8DOTS 0x00
 
+// flags for brightness settings
+#define LCD_BRIGHTNESS_100 0x00
+#define LCD_BRIGHTNESS_75 0x01
+#define LCD_BRIGHTNESS_50 0x02
+#define LCD_BRIGHTNESS_25 0x03
+
 #define LCD_SPICOMMAND 0xF8
 #define LCD_SPIDATA 0xFA
 
@@ -51,7 +57,7 @@ public:
   SPI_VFD(uint8_t data, uint8_t clock);
     
   void init(uint8_t data, uint8_t clock, uint8_t chipselect);
-  void begin(uint8_t cols, uint8_t rows, uint8_t charsize = LCD_5x8DOTS);
+  void begin(uint8_t cols, uint8_t rows, uint8_t charsize = LCD_5x8DOTS, uint8_t brightness = 4);
 
   void clear();
   void home();

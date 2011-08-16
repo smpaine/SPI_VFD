@@ -11,6 +11,7 @@
 // 2. Function set: 
 //    DL = 1; 8-bit interface data 
 //    N = 0; 1-line display 
+//    BR1=BR0=0; (100% brightness)
 //    F = 0; 5x8 dot character font 
 // 3. Display on/off control: 
 //    D = 0; Display off 
@@ -51,7 +52,7 @@ void SPI_VFD::init(uint8_t data, uint8_t clock, uint8_t chipselect)
   begin(20, 2);  
 }
 
-void SPI_VFD::begin(uint8_t cols, uint8_t lines, uint8_t dotsize) {
+void SPI_VFD::begin(uint8_t cols, uint8_t lines, uint8_t dotsize, uint8_t brightness) {
   if (lines > 1) {
     _displayfunction |= LCD_2LINE;
   }
@@ -66,6 +67,21 @@ void SPI_VFD::begin(uint8_t cols, uint8_t lines, uint8_t dotsize) {
   clear();
   home();
 
+    // set the brightness
+    if (brightness==NULL || brightness>=4) {
+        //do nothing; leave at 100%
+    } else if (brightness==3) {
+        //set to 75%
+        _displayfunction |= LCD_BRIGHTNESS_75;
+    } else if (brightness==2) {
+        //set to 50%
+        _displayfunction |= LCD_BRIGHTNESS_50;
+    } else if (brightness==1) {
+        //set to 25%
+        _displayfunction |= LCD_BRIGHTNESS_25;
+    }
+
+    
   // set up the display size
   command(LCD_FUNCTIONSET | _displayfunction);
 
