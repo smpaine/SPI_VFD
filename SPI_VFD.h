@@ -43,49 +43,52 @@
 #define VFD_BRIGHTNESS100 0x00
 
 #define VFD_SPICOMMAND 0xF8
-#define VFD_SPIDATA 0xFA
+#define VFD_SPIWRITE 0xFA
+#define VFD_SPIADDREAD 0xFC
 
 class SPI_VFD : public Print {
 public:
-  SPI_VFD(uint8_t data, uint8_t clock, uint8_t strobe, uint8_t brightness = VFD_BRIGHTNESS100);
+    SPI_VFD(uint8_t data, uint8_t clock, uint8_t strobe, uint8_t brightness = VFD_BRIGHTNESS100);
     
-  void init(uint8_t data, uint8_t clock, uint8_t strobe, uint8_t brightness);
-  void begin(uint8_t cols, uint8_t rows, uint8_t brightness = VFD_BRIGHTNESS100);
-
-  void clear();
-  void home();
-
-  void setBrightness(uint8_t brightness);
-  uint8_t getBrightness();
-  void noDisplay();
-  void display();
-  void noBlink();
-  void blink();
-  void noCursor();
-  void cursor();
-  void scrollDisplayLeft();
-  void scrollDisplayRight();
-  void leftToRight();
-  void rightToLeft();
-  void autoscroll();
-  void noAutoscroll();
-
-  void createChar(uint8_t, uint8_t[]);
-  void setCursor(uint8_t, uint8_t); 
-  virtual void write(uint8_t);
-  void command(uint8_t);
-private:
-  inline void send(uint8_t data);
-  
-  uint8_t _clock, _data, _strobe;  // SPI interface
-
-  uint8_t _displayfunction;
-  uint8_t _displaycontrol;
-  uint8_t _displaymode;
-
-  uint8_t _initialized;
-
-  uint8_t _numlines, _currline;
-};
-
+    void init(uint8_t data, uint8_t clock, uint8_t strobe, uint8_t brightness);
+    void begin(uint8_t cols, uint8_t rows, uint8_t brightness = VFD_BRIGHTNESS100);
+    
+    void clear();
+    void home();
+    
+    void setBrightness(uint8_t brightness);
+    uint8_t getBrightness();
+    void noDisplay();
+    void display();
+    void noBlink();
+    void blink();
+    void noCursor();
+    void cursor();
+    void scrollDisplayLeft();
+    void scrollDisplayRight();
+    void leftToRight();
+    void rightToLeft();
+    void autoscroll();
+    void noAutoscroll();
+    
+    void createChar(uint8_t, uint8_t[]);
+    void setCursor(uint8_t, uint8_t); 
+    virtual void write(uint8_t);
+    virtual uint8_t read_addr();
+        void command(uint8_t);
+    private:
+        inline void send(uint8_t data);
+        inline uint8_t recv();
+        
+        uint8_t _clock, _data, _strobe;  // SPI interface
+        
+        uint8_t _displayfunction;
+        uint8_t _displaycontrol;
+        uint8_t _displaymode;
+        
+        uint8_t _initialized;
+        
+        uint8_t _numlines, _currline;
+    };
+    
 #endif
