@@ -209,6 +209,19 @@ void SPI_VFD::command(uint8_t value) {
 }
 
 void SPI_VFD::write(uint8_t value) {
+    uint8_t ready;
+    
+    // Wait for display to be ready
+    do {
+        //Serial.print("Checking BF... ");
+        
+        // check if display is ready (checking for BF=0)
+        ready=read_addr();
+        
+        // only care about BF, which is MSB
+        ready>>=7;
+    } while (ready);
+    
     digitalWrite(_strobe, LOW);
     send(VFD_SPIWRITE);
     send(value);
