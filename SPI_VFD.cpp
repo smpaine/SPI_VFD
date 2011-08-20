@@ -247,7 +247,7 @@ uint8_t SPI_VFD::read_addr() {
      Serial.print(VFD_SPIADDREAD, HEX);
      Serial.print('\t');
      Serial.println(value, HEX);
-     */
+    */
     
     return value;
 }
@@ -283,7 +283,7 @@ inline uint8_t SPI_VFD::recv() {
         // pull clock low
         digitalWrite(_clock, LOW);
         // read next value from display
-        c=digitalRead(_data);
+        c|=digitalRead(_data);
         // make room for next value
         if (i) {
             c<<=1;
