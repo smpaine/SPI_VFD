@@ -187,8 +187,6 @@ void SPI_VFD::command(uint8_t value) {
     
     // Wait for display to be ready
     do {
-        //Serial.print("Checking BF... ");
-        
         // check if display is ready (checking for BF=0)
         ready=read_addr();
         
@@ -213,8 +211,6 @@ void SPI_VFD::write(uint8_t value) {
     
     // Wait for display to be ready
     do {
-        //Serial.print("Checking BF... ");
-        
         // check if display is ready (checking for BF=0)
         ready=read_addr();
         
@@ -223,12 +219,12 @@ void SPI_VFD::write(uint8_t value) {
     } while (ready);
     
     digitalWrite(_strobe, LOW);
-    send(VFD_SPIWRITE);
+    send(VFD_SPIDATAWRITE);
     send(value);
     digitalWrite(_strobe, HIGH);
     
     /*
-     Serial.print(VFD_SPIWRITE, HEX);
+     Serial.print(VFD_SPIDATAWRITE, HEX);
      Serial.print('\t');
      Serial.println(value, HEX);
      */
@@ -239,7 +235,6 @@ uint8_t SPI_VFD::read_addr() {
     
     digitalWrite(_strobe, LOW);
     send(VFD_SPIADDREAD);
-    delayMicroseconds(1);
     value=recv();
     digitalWrite(_strobe, HIGH);
     
@@ -247,7 +242,7 @@ uint8_t SPI_VFD::read_addr() {
      Serial.print(VFD_SPIADDREAD, HEX);
      Serial.print('\t');
      Serial.println(value, HEX);
-    */
+     */
     
     return value;
 }
@@ -275,20 +270,28 @@ inline void SPI_VFD::send(uint8_t c) {
 
 // read spi data
 inline uint8_t SPI_VFD::recv() {
-    int8_t i,c;
+    int8_t i, c;
     
+    pinMode(_data, INPUT);
     digitalWrite(_clock, HIGH);
     
+    c = 0;
+
     for (i=7; i>=0; i--) {
         // pull clock low
         digitalWrite(_clock, LOW);
-        // read next value from display
-        c|=digitalRead(_data);
+
         // make room for next value
-        if (i) {
-            c<<=1;
-        }
+        c <<= 1;
+
+        // read next value from display
+        c |= digitalRead(_data);
+
         // pull clock high to prepare for next read
         digitalWrite(_clock, HIGH);
     }
+
+    pinMode(_data, OUTPUT);
+    
+    return c;
 }
