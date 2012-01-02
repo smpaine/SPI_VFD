@@ -1,8 +1,11 @@
 #ifndef SPI_VFD_h
 #define SPI_VFD_h
 
+#include <stdio.h>
+#include <string.h>
 #include <inttypes.h>
-#include "Print.h"
+#include <Arduino.h>
+#include <Print.h>
 
 // commands
 #define VFD_CLEARDISPLAY 0x01
@@ -74,9 +77,10 @@ public:
     
     void createChar(uint8_t, uint8_t[]);
     void setCursor(uint8_t, uint8_t); 
-    virtual void write(uint8_t);
-    virtual uint8_t read_addr();
+
 	void command(uint8_t);
+    virtual size_t write(uint8_t);
+    virtual uint8_t read_addr();
 private:
 	inline void send(uint8_t data);
 	inline uint8_t recv();

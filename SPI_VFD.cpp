@@ -1,10 +1,5 @@
 #include "SPI_VFD.h"
 
-#include <stdio.h>
-#include <string.h>
-#include <inttypes.h>
-#include "WProgram.h"
-
 // When the display powers up, it is configured as follows:
 //
 // 1. Display clear
@@ -206,7 +201,7 @@ void SPI_VFD::command(uint8_t value) {
      */
 }
 
-void SPI_VFD::write(uint8_t value) {
+size_t SPI_VFD::write(uint8_t value) {
     uint8_t ready;
     
     // Wait for display to be ready
@@ -228,6 +223,7 @@ void SPI_VFD::write(uint8_t value) {
      Serial.print('\t');
      Serial.println(value, HEX);
      */
+	return 1;
 }
 
 uint8_t SPI_VFD::read_addr() {
