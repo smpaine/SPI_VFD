@@ -4,7 +4,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <inttypes.h>
-#include <Arduino.h>
+#if ARDUINO >= 100
+	#include "Arduino.h"
+#else
+	#include "WProgram.h"
+#endif
 #include <Print.h>
 
 // commands
@@ -79,7 +83,11 @@ public:
     void setCursor(uint8_t, uint8_t); 
 
 	void command(uint8_t);
+#if ARDUINO >= 100
     virtual size_t write(uint8_t);
+#else
+	virtual void write(uint8_t);
+#endif
     virtual uint8_t read_addr();
 private:
 	inline void send(uint8_t data);

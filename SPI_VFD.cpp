@@ -18,8 +18,7 @@
 // can't assume that its in that state when a sketch starts (and the
 // SPI_VFD constructor is called).
 
-SPI_VFD::SPI_VFD(uint8_t data, uint8_t clock, uint8_t strobe, uint8_t brightness)
-{
+SPI_VFD::SPI_VFD(uint8_t data, uint8_t clock, uint8_t strobe, uint8_t brightness) {
     _clock = clock;
     _data = data;
     _strobe = strobe;
@@ -201,7 +200,11 @@ void SPI_VFD::command(uint8_t value) {
      */
 }
 
+#if ARDUINO >= 100
 size_t SPI_VFD::write(uint8_t value) {
+#else
+void SPI_VFD::write(uint8_t value) {
+#endif
     uint8_t ready;
     
     // Wait for display to be ready
@@ -223,7 +226,9 @@ size_t SPI_VFD::write(uint8_t value) {
      Serial.print('\t');
      Serial.println(value, HEX);
      */
+#if ARDUINO >= 100
 	return 1;
+#endif
 }
 
 uint8_t SPI_VFD::read_addr() {
